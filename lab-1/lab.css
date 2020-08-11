@@ -1,0 +1,32 @@
+body{
+    background-color: rgba(99, 154, 168, 0.85);
+}
+#app{
+    text-align: center;
+}
+h3{
+    color: red;
+    box-shadow: 5px 2px 2px #0001;
+    background-color: black;
+}
+h4{
+    color: green;
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+h6{
+    color: gray;
+
+}
+.table{
+    margin: 10px; 
+}
+input{
+    margin-right: 20px;
+}
+.space{
+    margin-top: 20px;
+}
+.row{
+    margin-top: 20px;
+}

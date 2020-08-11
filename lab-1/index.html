@@ -9,13 +9,15 @@
 <body class="paper">
 	<div id="app">
 		<input type="number" v-model="n">
+		<input type="number" v-model="row">
 		<div class="space"></div>
-		<h3>สูตรคูณแม่  {{n}}</h3>
-		<h4
-		v-for="i in 12">
+		<h3><strong>สูตรคูณแม่  {{n}}</strong></h3>
+		<h6>แม่สูตรคูณก่อนหน้านี้ แม่{{b_n}}</h6>
+		<h4 
+		v-for="i in r">
 		{{n}} x {{i}} = {{multiply(i)}}
 		</h4>
-		<h4>
+		<h3 class = "row">
 			Sum = {{sos()}}
 		</h4>
 	
@@ -26,7 +28,14 @@
 			el: '#app',
 			data: {
 				n: 2,
+				b_n: 1,
+				row: 12,
 			
+			},
+			computed: {
+				r: function(){
+					return parseInt(this.row)
+				}
 			},
 			methods: {
 				multiply: function(x){
@@ -36,12 +45,17 @@
 				sos: function(){
 					var muls = 0
 					var i
-					for (let i = 1; i <= 12; i++) {
+					for (let i = 1; i <= this.row; i++) {
 						muls += this.n*i
 					}
 					return muls
 				}
-			}
+			},
+			watch: {
+				n:function(a,b){
+					this.b_n=b;
+				}
+			},
 		})
 	</script>
 </body>
