@@ -77,21 +77,29 @@ div.box {
 }
 
 .box._toggle {
-    background-color: yellow;
-    transition: none;
-    opacity: .5;
+    background-image: url("Right_arrow.jpg");
+	background-size: 120%;
+	background-repeat: no-repeat;
 }
 
 .box._toggle[data-isrightarrow="0"] {
-    background-color: red;
+	background-image: url("Up_arrow.jpg");
+	background-size: 100%;
+	background-repeat: no-repeat;
 }
 
 .box._12 {
     background-color: red;
 }
+.box._12[data-state = "2"]{
+    background-color: yellow;
+}
 
 .box._16 {
     background-color: yellow;
+}
+.box._16[data-state = "2"] {
+    background-color:red;
 }
 
 .box._path {

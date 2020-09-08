@@ -12,7 +12,7 @@
     <div id="canvas">
         <section id="canvas_header">
             <div>
-                คะแนน {{score}} time {{time}} Turn {{turn}}
+                คะแนน {{score}} time {{time}} speed {{speed}}
             </div>
         </section>
         <section id="canvas_main" :data-play="play">
@@ -23,8 +23,8 @@
                 <div class="box _fruit" v-for="f in fruits" :data-pst="f.pst" :data-type="f.type"></div>
 
                 <div class="box _origin"></div>
-                <div class="box _12" data-pst="12"></div>
-                <div class="box _16" data-pst="16"></div>
+                <div class="box _12" data-pst="12":data-state="state"></div>
+                <div class="box _16" data-pst="16":data-state="state"></div>
 
             </main>
         </section>
@@ -44,7 +44,6 @@
             return Math.floor(Math.random() * 100 % shift) + start
         }
         let nextFruitID = 5
-        let speed = 1000
         let app = new Vue({
             el: '#canvas',
             data: {
@@ -52,7 +51,9 @@
                 play: true,
 				time: 30,
 				turn:0,
-                score: 0,
+				score: 0,
+				state:1,
+				speed:1000,
                 fruits: [{
                     id: 1,
                     type: 'red',
@@ -95,7 +96,7 @@
 
             },
             watch: { //ดูการเปลี่ยนค่าเป็นตัวๆ
-                turn: function(x) {
+                turn : function(x) {
                     let count = this.fruits.length
                     for (let f in this.fruits) {
                         //console.log(this.fruits[f].id)
@@ -106,16 +107,46 @@
                             this.fruits[f].step = 3
                         }
                         if ((this.fruits[f].pst == 12 || this.fruits[f].pst == 16) && this.fruits[f].run == true) {
-                            if (this.fruits[f].type == 'red' && this.fruits[f].pst == 12) {
+                            if (this.fruits[f].type == 'red' && this.fruits[f].pst == 12 ) {
+								if (this.score%2==0){
 								this.score++
 								app.time+=2
+								this.state = 2
+								app.speed +=100
+							}
+								else{
+									app.time-=5
+								}
                             } else if (this.fruits[f].type == 'yellow' && this.fruits[f].pst == 16) {
+								if (this.score%2==0){
 								this.score++
-								app.time +=2
+								app.time+=2
+								this.state = 2
+								app.speed +=100
+							}
+								else{
+									app.time-=5
+								}
                             }else if (this.fruits[f].type == 'red' && this.fruits[f].pst == 16) {
-								app.time -=5
+								if (this.score%2!=0){
+								this.score++
+								app.time+=2
+								this.state = 1
+								app.speed +=100
+							}
+								else{
+									app.time-=5
+								}
                             } else if (this.fruits[f].type == 'yellow' && this.fruits[f].pst == 12) {
-								app.time -=5
+								if (this.score%2!=0){
+								this.score++
+								app.time+=2
+								this.state = 1
+								app.speed +=100
+							}
+								else{
+									app.time-=5
+								}
                             }
                             this.fruits[f].run = false
                         }
@@ -154,7 +185,7 @@
         let playing = setInterval(function() {
 			app.time--
 			app.turn++
-        }, speed);
+        }, app.speed);
     </script>
 </body>
 
