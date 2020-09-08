@@ -12,7 +12,7 @@
     <div id="canvas">
         <section id="canvas_header">
             <div>
-                คะแนน {{score}} time {{time}} speed {{speed}}
+                คะแนน {{score}} time {{time}}
             </div>
         </section>
         <section id="canvas_main" :data-play="play">
@@ -49,7 +49,7 @@
             data: {
                 isRightArrow: 1,
                 play: true,
-				time: 30,
+				time: 45,
 				turn:0,
 				score: 0,
 				state:1,
@@ -99,7 +99,6 @@
                 turn : function(x) {
                     let count = this.fruits.length
                     for (let f in this.fruits) {
-                        //console.log(this.fruits[f].id)
                         if (this.fruits[f].run) {
                             this.fruits[f].pst += this.fruits[f].step;
                         }
