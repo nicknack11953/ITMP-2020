@@ -1,0 +1,31 @@
+table.nn {
+    width: 40vw;
+}
+
+div.all {
+    width: 40vw;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: nowrap;
+    background-color: red;
+}
+
+.flex-container > div {
+    background-color: green;
+    width: 50%;
+    margin: 20px;
+    text-align: center;
+    line-height: 65px;
+    font-size: 30px;
+    color: black;
+    
+  }
+
+  .list {
+      font-size: 20px;
+  }
+  .h1{
+      color: rebeccapurple;
+  }
