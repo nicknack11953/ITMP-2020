@@ -9,34 +9,42 @@
 <body>
 	<div id="canvas">
 		<section id="canvas_header">
-			<div>
-				เหลือเวลา 10 วินาที
-			</div>
+            <div>
+                <h1 id="p2"> {{time}} Second Remain </font></h1>
+                <div>
+                    <center><p1 id="p1"> Points : {{score}} X {{muti}} || Combo : {{combo}} </p1></center>
+                </div>
+           
+            </div>
+
+            
 		</section>
 		<section id="canvas_main">
 			<main>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
-				<a-dot style="--l:80%"></a-dot>
-				<a-dot data-pick="true"></a-dot>
-				<a-dot></a-dot>
-				<a-dot></a-dot>
+                <a-dot v-for="i in row*row"
+				:style="{
+					'--row':row,
+					'--h':h,
+					'--l':l+'%',
+					
+				}":data-pick= "i == pick"
+				@click="check(i == pick)"
+				></a-dot>
+				
 			</main>
 		</section>
 		<section id="canvas_footer">
-			<div>
-				0 คะแนน
-			</div>
+            <div id="process">
+                <div id="processing">
+            </div>       
+            
 		</section>
 	</div>
 
 	<script>
 		let picklight = "20%" //เลือกว่ารอบนี้ อันพิเศษจะมีความสว่าง 20%
-		document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
-
+		// document.registerElement('a-dot') //ให้ vue รู้จัก a-dot
+        
 		function rand(start,stop){//สร้างฟังก์ชัน random ไว้ใช้
 			let shift = (stop-start)+1
 			return Math.floor(Math.random()*100%shift)+start
@@ -45,27 +53,133 @@
 		let app = new Vue({
 			el:'#canvas',
 			data:{
-				row:2, //จำนวนแถวที่จะมีในรอบนี้
-				h:330, // hue ในรอบนี้
-				time:10, //เวลาเริ่มต้น
+				row:3, //จำนวนแถวที่จะมีในรอบนี้
+				h:1, // hue ในรอบนี้
+				time:20, //เวลาเริ่มต้น
 				score:0, //คะแนนเริ่มต้น
 				pick:1, //หมายเลขวงกลมที่จะสีแตกต่างจากก้อนอื่นๆ
-				l:30,//ความสว่างของสีทั่วไปในรอบนี้
+				l:40,//ความสว่างของสีทั่วไปในรอบนี้
+                process:0,
+                cap:3,
+                combo:0,
+                triger:0,
+                muti:1,
+                deltime:1,
+                dou:0
 			},
 			methods: {
+                check: function(i){
+                    if (this.time > 0){
+                        if(i == true){
+                            this.correct()
+                            if(this.cap < 8){
+                                this.process+=10;
+                            }
+                            else{
+                                this.process=100
+
+                            }
+                            this.h = rand(rand(100,200),rand(300,400))
+                            document.getElementById("processing").style.width = this.process + "%";
+        
+                            if(this.process == 100 & this.cap < 8){
+                                this.cap ++;
+                                this.process = 0
+                            }
+                        }
+                        else{
+                            this.notthatdot()
+                        }
+                    }
+                    
+
+                    // Check true or flase
+                },
+                correct: function(){
+                    this.row = this.cap//rand(this.cap-1,this.cap)
+                    this.pick = rand(1,this.row*this.row)
+                    this.combo++   
+                    this.score += (1*this.muti)
+                    this.triger ++
+                    
+                   
+                   if(this.triger == 5){
+                        this.muti+=2;
+                        this.triger = 0
+                        
+                    }
+                 
+                    
+                    
+                    if(app.time < 20){
+                        app.time += 1*this.combo
+                    }
+                    //console.log('Correct!')
+                    //console.log('Process = '+ this.process)
+                },
+                notthatdot: function(){
+                    if(this.score > 0){
+                        this.score--;
+                        this.combo = 0;
+                        this.muti = 1;
+                    }
+                    if(app.time > 5){
+                        app.time-=5
+                    }
+                    else{
+                        app.time--
+                    }
+                    if(this.process != 0){
+                        this.process-=10
+                    }
+                    
+                    
+                    document.getElementById("processing").style.width = this.process + "%";
+                    console.log('Incorrect!')
+                }
 
 			}
 		})
 		//ทำให้แคนวาสมี --picklight ตามที่กำหนดไว้ข้างบนนี้
 		document.querySelector('#canvas').style.setProperty('--picklight',picklight);
 		
-		let counter = setInterval(()=>{
-			if (app.time>0) {
-				app.time--
-			}else{
-				clearInterval(counter)
+		let counter = setInterval(()=>{// ทุกๆ
+            //console.log(app.deltime)
+            if (app.time>0) {
+				app.time -= (1*app.deltime);
+                app.dou += app.deltime
+                if (app.time < 0) {
+                app.time = 0;
+                }
+                if (app.dou >= 5){
+                app.pick = rand(1,app.row*app.row)
+                app.dou = 0;
+                }  
 			}
-		},1000);
+           
+            if (app.score >= 10 && app.score < 50){
+                document.getElementById("p1").style.color = "yellow";
+                app.deltime = 2;
+            }
+            if (app.score >= 50 && app.score < 100){
+                document.getElementById("p1").style.color = "red";
+                app.deltime = 3;
+            }
+            if (app.score >= 100){
+                document.getElementById("p1").style.color = "purple";
+                app.deltime = 5;
+            }
+            if (app.time <= 10){
+                document.getElementById("p2").style.color = "red"
+            }
+            if (app.time > 10){
+                document.getElementById("p2").style.color = "green"
+            }
+            if (app.time<0){
+				clearInterval(counter)
+			}     
+		    },1000);
+        
 	</script>
 </body>
 </html>
